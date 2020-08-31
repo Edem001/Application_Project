@@ -33,9 +33,66 @@ public class MainActivity extends AppCompatActivity {
         ft = fm.beginTransaction();
         ft.replace(R.id.displayed_fragment, current_fragment);
         ft.commit();
-    }
-    public void onClick(){
 
     }
+    public void onClick(View view){
+        switch (view.getId()){
+            case R.id.button_plus:
+                if(CUR_PAGE == MAX_PAGES)
+                {
+                    MAX_PAGES++;
+                    CUR_PAGE++;
+                    switchPage(CUR_PAGE, false);
+                }
+                else {
+                    MAX_PAGES++;
+                }
 
+                break;
+            case R.id.button_minus:
+                if(MAX_PAGES > 1){
+                    if (MAX_PAGES == CUR_PAGE){
+                        MAX_PAGES--;
+                        CUR_PAGE--;
+                        switchPage(CUR_PAGE, true);
+                    }
+                    if (CUR_PAGE < MAX_PAGES){
+                        MAX_PAGES--;
+                    }
+
+                }
+        }
+    }
+    void switchPage(int page, boolean reverse){
+        Bundle args = new Bundle();
+        args.putInt("page", page);
+
+        if (!reverse) {
+            next_fragment = new mFragment();
+            next_fragment.setArguments(args);
+
+            fm = getSupportFragmentManager();
+            ft = fm.beginTransaction();
+            ft.replace(R.id.displayed_fragment, next_fragment);
+            ft.commit();
+
+            last_fragment = current_fragment;
+            current_fragment = next_fragment;
+            next_fragment = null;
+        }
+        else {
+            last_fragment = new mFragment();
+            last_fragment.setArguments(args);
+
+            fm = getSupportFragmentManager();
+            ft = fm.beginTransaction();
+            ft.replace(R.id.displayed_fragment, last_fragment);
+            ft.commit();
+
+            next_fragment = current_fragment;
+            current_fragment = last_fragment;
+            last_fragment = null;
+
+        }
+    }
 }

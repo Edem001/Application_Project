@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 public class mFragment extends Fragment {
@@ -19,6 +20,11 @@ public class mFragment extends Fragment {
         View view = inflater.inflate(R.layout.frag_example,container,false);
         currentPage = view.findViewById(R.id.page_number);
         currentPage.setText(page+"");
+        Button buttonMinus = view.findViewById(R.id.button_minus);
+        if (page < 2)
+            buttonMinus.setEnabled(false);
+        else
+            buttonMinus.setEnabled(true);
         return view;
 
     }
