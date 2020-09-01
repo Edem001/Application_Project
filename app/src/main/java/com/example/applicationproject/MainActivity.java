@@ -1,15 +1,19 @@
 package com.example.applicationproject;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.viewpager.widget.ViewPager;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
-
 
 public class MainActivity extends AppCompatActivity {
     public static int MAX_PAGES = 1;
@@ -18,21 +22,55 @@ public class MainActivity extends AppCompatActivity {
     FragmentTransaction ft;
     mFragment last_fragment, current_fragment, next_fragment;
     Button button_minus, buton_plus, button_notify;
+    ViewPager viewPager;
+    mAdapter adapter;
+
+    public static class mAdapter extends FragmentPagerAdapter {
+        mAdapter(@NonNull FragmentManager fm, Context context){
+            super(fm);
+            this.context = context;
+        }
+    Context context;
+        @Override
+        public Fragment getItem(int position) {
+            mFragment previousFragment, currentFragment, nextFragment;
+            Bundle args = new Bundle();
+                    currentFragment = new mFragment();
+                    args.putInt("page", CUR_PAGE);
+                    currentFragment.setArguments(args);
+                    currentFragment.setContext(context);
+                    return  currentFragment;
+
+        }
+
+        @Override
+        public int getCount() {
+            return MAX_PAGES;
+        }
+
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        Bundle args = new Bundle();
-        args.putInt("page", 1);
-
-        current_fragment = new mFragment();
-        current_fragment.setArguments(args);
         setContentView(R.layout.activity_main);
 
-        fm = getSupportFragmentManager();
-        ft = fm.beginTransaction();
-        ft.replace(R.id.displayed_fragment, current_fragment);
-        ft.commit();
+        adapter = new mAdapter(getSupportFragmentManager(), this);
+        viewPager = findViewById(R.id.viewPager);
+        viewPager.setAdapter(adapter);
+        viewPager.setOffscreenPageLimit(1);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                CUR_PAGE = viewPager.getCurrentItem()+1;
+
+            }
+            @Override
+            public void onPageSelected(int position) {}
+            @Override
+            public void onPageScrollStateChanged(int state) {}
+        });
 
     }
     public void onClick(View view){
@@ -42,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
                 {
                     MAX_PAGES++;
                     CUR_PAGE++;
-                    switchPage(CUR_PAGE, false);
+                    switchPageOnButtonPress(CUR_PAGE-1, false);
                 }
                 else {
                     MAX_PAGES++;
@@ -51,48 +89,31 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.button_minus:
                 if(MAX_PAGES > 1){
-                    if (MAX_PAGES == CUR_PAGE){
+                    if (MAX_PAGES <= CUR_PAGE){
                         MAX_PAGES--;
                         CUR_PAGE--;
-                        switchPage(CUR_PAGE, true);
+                        switchPageOnButtonPress(CUR_PAGE-1, true);
                     }
                     if (CUR_PAGE < MAX_PAGES){
                         MAX_PAGES--;
                     }
-
+                    adapter.notifyDataSetChanged();
                 }
         }
     }
-    void switchPage(int page, boolean reverse){
+    void switchPageOnButtonPress(int page, boolean reverse){
         Bundle args = new Bundle();
         args.putInt("page", page);
-
+        adapter.notifyDataSetChanged();
         if (!reverse) {
             next_fragment = new mFragment();
             next_fragment.setArguments(args);
-
-            fm = getSupportFragmentManager();
-            ft = fm.beginTransaction();
-            ft.replace(R.id.displayed_fragment, next_fragment);
-            ft.commit();
-
-            last_fragment = current_fragment;
-            current_fragment = next_fragment;
-            next_fragment = null;
+            viewPager.setCurrentItem(page);
         }
         else {
             last_fragment = new mFragment();
             last_fragment.setArguments(args);
-
-            fm = getSupportFragmentManager();
-            ft = fm.beginTransaction();
-            ft.replace(R.id.displayed_fragment, last_fragment);
-            ft.commit();
-
-            next_fragment = current_fragment;
-            current_fragment = last_fragment;
-            last_fragment = null;
-
+            viewPager.setCurrentItem(page);
         }
     }
 }
