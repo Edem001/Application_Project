@@ -10,6 +10,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -24,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
     Button button_minus, buton_plus, button_notify;
     ViewPager viewPager;
     mAdapter adapter;
+    SharedPreferences preferences;
 
     public static class mAdapter extends FragmentPagerAdapter {
         mAdapter(@NonNull FragmentManager fm, Context context){
@@ -54,6 +56,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        preferences = getSharedPreferences("PAGES_DATA", MODE_PRIVATE);
+        preferencesWorker pw = new preferencesWorker(preferences);
 
         adapter = new mAdapter(getSupportFragmentManager(), this);
         viewPager = findViewById(R.id.viewPager);
