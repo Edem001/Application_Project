@@ -38,8 +38,8 @@
     <Button
         android:id="@+id/button_minus"
         style="?android:attr/borderlessButtonStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         android:layout_alignStart="@+id/page_number"
         android:layout_alignBottom="@+id/page_number"
         android:layout_marginStart="-15dp"
@@ -57,8 +57,8 @@
     <Button
         android:id="@+id/button_plus"
         style="?android:attr/borderlessButtonStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         android:layout_alignEnd="@+id/page_number"
         android:layout_alignBottom="@+id/page_number"
         android:layout_marginEnd="-15dp"
