@@ -7,41 +7,70 @@
     tools:context=".MainActivity">
 
     <Button
-        android:id="@+id/button_minus"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="20dp"
-        android:layout_marginBottom="20dp"
-        android:onClick="onClick"
-        android:text="-" />
-
-    <Button
-        android:id="@+id/button_plus"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="20dp"
-        android:onClick="onClick"
-        android:text="+" />
-    <Button
         android:id="@+id/button_notify"
+        style="?android:attr/borderlessButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="Send notification"
-        />
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="100dp"
+        android:layout_marginBottom="40dp"
+        android:background="@mipmap/oval"
+        android:text="@string/create_notification"
+        android:textColor="@android:color/white" />
 
     <TextView
         android:id="@+id/page_number"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="168dp"
-        android:layout_marginBottom="33dp"
-        android:text="TextView" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="40dp"
+        android:background="@mipmap/rectangle"
+        android:gravity="center"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:text="TextView"
+        android:textColor="@android:color/white"
+        android:textSize="24sp" />
+
+    <Button
+        android:id="@+id/button_minus"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/page_number"
+        android:layout_alignBottom="@+id/page_number"
+        android:layout_marginStart="-15dp"
+        android:layout_marginBottom="-12dp"
+        android:background="@mipmap/blue"
+        android:elevation="0dp"
+        android:fontFamily="monospace"
+        android:foreground="@mipmap/minus"
+        android:foregroundGravity="center"
+        android:onClick="onClick"
+        android:textAlignment="center"
+        android:textColor="@android:color/white"
+        android:textSize="24sp" />
+
+    <Button
+        android:id="@+id/button_plus"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/page_number"
+        android:layout_alignBottom="@+id/page_number"
+        android:layout_marginEnd="-15dp"
+        android:layout_marginBottom="-12dp"
+        android:background="@mipmap/blue"
+        android:elevation="0dp"
+        android:fontFamily="monospace"
+        android:foreground="@mipmap/plus"
+        android:foregroundGravity="center"
+        android:onClick="onClick"
+        android:textAlignment="center"
+        android:textColor="@android:color/white"
+        android:textSize="24sp" />
+
 </RelativeLayout>

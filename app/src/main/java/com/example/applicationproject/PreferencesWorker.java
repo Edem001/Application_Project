@@ -3,10 +3,10 @@ package com.example.applicationproject;
 import android.content.SharedPreferences;
 import android.util.Log;
 
-public class preferencesWorker {
+public class PreferencesWorker {
     SharedPreferences sPref;
 
-    public preferencesWorker(SharedPreferences preferences){
+    public PreferencesWorker(SharedPreferences preferences){
         sPref = preferences;
     }
 
@@ -32,7 +32,7 @@ public class preferencesWorker {
             try {
                 a = Integer.parseInt(resStr);
             }catch (Exception e){
-                Log.e("PREF_PARSE", "ERROR OCCURED DURING PREFERENCES PARSING");
+                Log.e("PREF_PARSE", "ERROR OCCURRED DURING PREFERENCES PARSING");
                 a = 1;
             }
         }

@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Application Project</string>
+    <string name="background">Background</string>
+    <string name="create_notification">Create \nnotification</string>
 </resources>
