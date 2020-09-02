@@ -10,15 +10,15 @@ public class preferencesWorker {
         sPref = preferences;
     }
 
-    public void save(int key, String value) {
+    public void save(String key, String value) {
         SharedPreferences.Editor edit = sPref.edit();
-        edit.putString(key + "", value);
+        edit.putString(key, value);
         edit.commit();
     }
 
-    public void save(int key, int value) {
+    public void save(String key, int value) {
         SharedPreferences.Editor edit = sPref.edit();
-        edit.putString(key + "", Integer.toString(value));
+        edit.putString(key, Integer.toString(value));
         edit.commit();
     }
 
@@ -26,14 +26,14 @@ public class preferencesWorker {
         String resStr = sPref.getString(key, "");
         int a;
         if (resStr.equals(""))
-            return -1;
+            return 1;
         else
         {
             try {
                 a = Integer.parseInt(resStr);
             }catch (Exception e){
                 Log.e("PREF_PARSE", "ERROR OCCURED DURING PREFERENCES PARSING");
-                a = -1;
+                a = 1;
             }
         }
         return a;

@@ -49,6 +49,7 @@ public class mFragment extends Fragment {
     private void callNotification(Context context, int currentPage){
         Intent startIntent = new Intent(context, MainActivity.class);
         startIntent.putExtra("page", page);
+        startIntent.putExtra("confirm", "YES");
         PendingIntent contentIntent = PendingIntent.getActivity(context, 0, startIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);

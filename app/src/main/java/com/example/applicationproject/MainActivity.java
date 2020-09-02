@@ -5,27 +5,23 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.fragment.app.FragmentStatePagerAdapter;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
+
+import static java.lang.Math.abs;
 
 public class MainActivity extends AppCompatActivity {
     public static int MAX_PAGES = 1;
     public static int CUR_PAGE = 1;
-    FragmentManager fm;
-    FragmentTransaction ft;
-    mFragment last_fragment, current_fragment, next_fragment;
-    Button button_minus, buton_plus, button_notify;
+    mFragment last_fragment, next_fragment;
     ViewPager viewPager;
     mAdapter adapter;
     SharedPreferences preferences;
+    preferencesWorker pw;
 
     public static class mAdapter extends FragmentPagerAdapter {
         mAdapter(@NonNull FragmentManager fm, Context context){
@@ -35,13 +31,13 @@ public class MainActivity extends AppCompatActivity {
     Context context;
         @Override
         public Fragment getItem(int position) {
-            mFragment previousFragment, currentFragment, nextFragment;
+            mFragment fragment;
             Bundle args = new Bundle();
-                    currentFragment = new mFragment();
-                    args.putInt("page", CUR_PAGE);
-                    currentFragment.setArguments(args);
-                    currentFragment.setContext(context);
-                    return  currentFragment;
+                    fragment = new mFragment();
+                    args.putInt("page", position+1);
+                    fragment.setArguments(args);
+                    fragment.setContext(context);
+                    return  fragment;
 
         }
 
@@ -58,18 +54,40 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         preferences = getSharedPreferences("PAGES_DATA", MODE_PRIVATE);
-        preferencesWorker pw = new preferencesWorker(preferences);
+        pw = new preferencesWorker(preferences);
+
+        MAX_PAGES = pw.loadPreferences("MAX_PAGES");
+        try {
+            if (getIntent().getStringExtra("confirm").equals("YES"))
+                CUR_PAGE = getIntent().getIntExtra("page", 1);
+            else
+                CUR_PAGE = pw.loadPreferences("CUR_PAGE");
+        }catch (NullPointerException npe){
+            CUR_PAGE = pw.loadPreferences("CUR_PAGE");
+        }
+        Log.d("SAVE", "MAX: "+ MAX_PAGES+ " ; CURRENT: "+ CUR_PAGE);
+
 
         adapter = new mAdapter(getSupportFragmentManager(), this);
         viewPager = findViewById(R.id.viewPager);
         viewPager.setAdapter(adapter);
-        viewPager.setOffscreenPageLimit(1);
+        viewPager.setCurrentItem(CUR_PAGE-1, true);
+        viewPager.setOffscreenPageLimit(MAX_PAGES);
+        viewPager.setPageTransformer(false, new ViewPager.PageTransformer() {
+            @Override
+            public void transformPage(@NonNull View page, float position) {
+               float opacity = abs(abs(position) - 1);
+               page.setAlpha(opacity);
+            }
+        });
+
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 CUR_PAGE = viewPager.getCurrentItem()+1;
-
+                if (abs(MAX_PAGES - CUR_PAGE) < 2)
+                    viewPager.setOffscreenPageLimit(1);
             }
             @Override
             public void onPageSelected(int position) {}
@@ -78,6 +96,14 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+
+    @Override
+    protected void onDestroy() {
+        pw.save("CUR_PAGE", CUR_PAGE);
+        pw.save("MAX_PAGES", MAX_PAGES);
+        super.onDestroy();
+    }
+
     public void onClick(View view){
         switch (view.getId()){
             case R.id.button_plus:
